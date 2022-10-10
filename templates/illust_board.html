@@ -1,3 +1,6 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
 <style>
 
 	.grid-item img {display: block; 
@@ -34,6 +37,17 @@
 
 
 </style>
+
+	<!-- 검색 바 영역 -->
+	
+	<div class="my-3" style="width:100%; padding:30px"/>
+		<div class="search">
+			<input class="search_bar" type="text" placeholder="검색어 입력">
+			<a href="#">
+				<img class="magnify_icon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			</a>
+		</div>
+	</div>
 
 	
 	<div class="grid">
@@ -219,3 +233,4 @@
 		imagesLoaded( '.grid' ).on( 'progress', function() {  msnry.layout();});
 	
 	</script>
+{% endblock %}
