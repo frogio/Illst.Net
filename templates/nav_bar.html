@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom sticky-top">
+
+	<div class="row" style="width:100%">			<!-- 부모의 가로 100%를 차지한다. nav바를 row화 하여 12부분으로 나눔 -->
+													<!-- width 속성은 부모의 크기에 몇 퍼센트를 차지하는지 기록할 수 있음-->
+		<div class = "col-1"> 
+			<a class="navbar-brand" href="{% url 'IllustNet:index' %}">Illust.NET</a>
+				<button class="navbar-toggler ml-auto" type="button"
+				data-toggle="collapse" data-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+			
+		</div>
+
+		<div class = "col-9" >
+
+		</div>		
+			
+		<div class = "col-2"> 
+		
+			<div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+				<ul class="navbar-nav">
+				
+						<li class="nav-item">
+							<a class="nav-link" href="#">로그인</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link" href="#">회원가입</a>
+						</li>
+						
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>
