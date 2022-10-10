@@ -1,10 +1,10 @@
+{% load bootstrap4 %}
 {% load static %}
-<!DOCTYPE HTML>
 
+<!DOCTYPE HTML>
 <html>
 
 	<head>
-	
 		<meta charset='utf-8'>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,25 +18,29 @@
 		<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 		<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script> 
 	
-	</head>
-		 
-	<body>
-		
-			{% include "nav_bar.html" %}
-
-			<!-- 검색 바 영역 -->
-				
-				<div class="my-3" style="width:100%; padding:30px"/>
-					<div class="search">
-						<input class="search_bar" type="text" placeholder="검색어 입력">
-						<a href="#">
-							<img class="magnify_icon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-						</a>
-					</div>
-				</div>
 	
-			{% include "illust_board.html" %}
+		{% bootstrap_css %}
+	</head>
+
+	<body>
+		<div class="container my-5">
+			<!--
+			<div class="container" style="width:100%; justify-content:flex-center;">
+				<p style="width:100%; justify-content:flex-center;"> 회원 가입 </p>
+			
+			</div>-->
+			
+			<form method="post" class="post-form">
+				{% csrf_token %}
+				{% bootstrap_form form %}			<!-- 회원가입 입력 양식 출력 -->
+				<button type="submit" class="btn btn-primary">
+					생성하기
+				</button>
+			</form>
+			
+		</div>
+	
+		{% bootstrap_javascript jquery='full' %}
 	</body>
-
-
+	
 </html>

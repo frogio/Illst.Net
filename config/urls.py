@@ -19,5 +19,6 @@ from IllustNet.views import main_views
 
 urlpatterns = [
 	path("", main_views.index, name="index"),
-	path("/", include('IllustNet.urls')),
+	path("IllustNet/", include('IllustNet.urls')),
+	path("common/", include('common.urls')),
 ]
