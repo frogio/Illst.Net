@@ -51,8 +51,21 @@
 
 	
 	<div class="grid">
-		<div class="grid-item">
 		<div class="grid-sizer"></div>
+		
+		{% for illust in illust_post %}
+			<div class="grid-item">
+	
+				<a href="#">
+					<img src="{{ illust.illust_url }}" />
+	
+				</a>
+			</div>  
+		
+		{% endfor %}
+		
+		<div class="grid-item">
+
 			<a href="#">
 				<img src="https://i.postimg.cc/gkQkrcf3/4.png" />
 
@@ -135,8 +148,8 @@
 
 			</a>
 		</div>
-				<div class="grid-item">
-		<div class="grid-sizer"></div>
+		<div class="grid-item">
+
 			<a href="#">
 				<img src="https://i.postimg.cc/gkQkrcf3/4.png" />
 
