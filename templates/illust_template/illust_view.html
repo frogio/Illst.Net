@@ -1,0 +1,193 @@
+{% extends 'main_page.html' %}
+
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+	.text-border{
+		border-width: 1px 0px 1px 0px;
+		border-style: solid;
+		padding-top:1rem;
+		padding-bottom:1rem;
+		text-align:center;
+		font-weight:bold;
+	}
+
+	.comment-border{
+		border-width: 0px 0px 1px 0px;
+		border-style: solid;
+		padding-top:1rem;
+		padding-bottom:1rem;
+		text-align:left;
+		
+	}
+	
+	a{
+		color:black;
+	}
+	
+	a:hover{
+		text-decoration:None;
+	}
+
+
+
+</style>
+
+<div class="card my-3 px-5 py-5" style="width:100%">
+
+	<div class="row" style="width:100%;">
+		
+		<div class="col-6">																	<!-- 일러스트 표시 부분 -->
+			<div class="text-border my-2">
+				<h2>{{ illust.title }}</h2>
+			</div>
+		
+			<img src="/media/{{ illust.illust_url }}" style="width:100%;">
+		
+			<div class="my-1" style="width:100%; display:flex; justify-content:right;">		<!-- 조회수 / 좋아요 표시 부분 -->
+				
+				<p style="font-size:25px;">
+					
+					{% if request.user.is_authenticated and illust.illustrator.id != request.user.id  %}
+						
+						{% if illust_is_liked == False %}
+	
+							<a href="#" data-uri = "{% url 'IllustNet:illust_like' illust.id %}" class="recommend">
+								<i class="far fa-heart"></i>
+							</a>
+	
+						{% else %}
+	
+							<a href="#" data-uri = "{% url 'IllustNet:illust_like' illust.id %}" class="recommend">
+								<i class="fas fa-heart"></i>
+							</a>
+	
+						{% endif %}
+
+					{% else %}
+
+						<i class="fas fa-heart"></i>
+
+					{% endif %}
+					{{ illust.recommend.count }}
+
+
+					<i class="fas fa-eye"></i> {{ hitcount.total_hits }}	
+					
+				</p>
+			
+			</div>
+			
+			{% if request.user.is_authenticated and illust.illustrator.id == request.user.id  %}		<!-- 일러스트 수정 / 삭제 부분 -->
+			
+				<div style="width:100%; display:flex; justify-content:right;">
+					<button class="btn btn-outline-dark mx-2" onclick="update_illust()">수정</a>
+					<button class="btn btn-outline-dark mx-2" onclick="delete_illust()">삭제</a>
+				</div>
+			
+			{% endif %}
+			
+			<div class="text-border my-2">
+				<h5><a href="#">{{ illust.illustrator.username }}</a> 작가의 코멘트</h5>					<!-- 일러스트 게시자 프로필 접근 -->
+			</div>
+		
+			{{ illust.brief_comment }}
+		</div>
+		
+		<div class="col-6 my-2">			<!-- 댓글 부분 -->
+						
+			<div class="text-border">댓글</div>
+			
+			{% for comment in illust.comment_set.all %}					<!-- 댓글 출력 -->
+
+			<div class="comment-border">
+			
+				<div class = "mx-3" style="display:flex;">				<!-- 댓글 작성자 -->
+					<a href="#">										<!-- 댓글 작성자 프로필 접근 -->
+						<img src="{{comment.comment_writer.profile_img_url}}"  
+							onerror="this.src='{% static 'icon/annonymous_user.png' %}'" class="rounded-circle" width="30" height="30">
+						{{comment.comment_writer.nickname}}
+					</a>
+					
+						<!-- 댓글 작성자 -->
+						<p class="my-2 mx-2" style="font-size:10px;">
+							{{comment.upload_time}}
+						</p>
+
+				</div>
+				
+				<div class="mx-3 my-2" style="display:flex;">									<!-- 댓글 내용 -->
+					{{ comment.comment }}
+					
+					{% if request.user.is_authenticated and illust.illustrator.id == request.user.id  %}
+					
+						<a class="mx-2 my-2"href="#" style="font-size:10px">					<!-- 댓글 수정 / 삭제 -->
+							수정
+						</a>
+						
+						<a class="my-2" href="#" style="font-size:10px">
+							삭제
+						</a>
+						
+					{% endif %}
+				</div>
+			</div>
+			
+			{% endfor %}
+			
+			<div class="my-3">																	<!-- 댓글 등록 부분 -->
+			
+					<form action="{% url 'IllustNet:comment_create_illust' illust.id %}" method="post">
+						
+						{% csrf_token %}
+						
+						<textarea class= "form-control" name="comment" rows="3" style="width:100%"></textarea>
+					
+						<div style="display:flex; width:100%;justify-content:right;">
+								
+							<button type="submit" class="btn btn-primary my-3">댓글 등록</button>
+						
+						</div>
+						
+					</form>
+					
+			</div>
+
+		</div>
+	
+	</div>
+	
+</div>
+
+
+<script>
+
+	function delete_illust(){
+		if(confirm("삭제하시겠습니까?"))
+			location.href = "{% url 'IllustNet:illust_delete' illust.id %}";
+	}
+	
+	function update_illust(){
+		if(confirm("수정하시겠습니까?"))
+			location.href = "{% url 'IllustNet:illust_update' illust.id %}";
+	}
+
+	$(document).ready(function(){
+	
+	
+		$(".recommend").on('click', function(){
+			location.href = $(this).data('uri');						// 그렇지 않을경우 추천
+		});
+		
+
+	});
+
+</script>
+
+
+{% endblock %}

@@ -41,7 +41,7 @@
 				
 					<a class="nav-link" href="#">	 <!-- mypage 이동 앵커 -->
 							
-					<div style="display:flex">		<!-- flex css 속성은 가로로 엘리먼트를 배치하게 함 -->
+						<div style="display:flex">		<!-- flex css 속성은 가로로 엘리먼트를 배치하게 함 -->
 	
 							<li class="nav-item mx-2">
 							
@@ -52,10 +52,7 @@
 							
 							<li class="nav-item ">
 								{% if user.is_superuser == 1 %}
-								<a class="nav-link" href="#">
 										관리자 계정
-								</a>
-								
 								{% else %}
 										{{ user.nickname }}
 								{% endif %}

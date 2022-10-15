@@ -49,193 +49,30 @@
 		</div>
 	</div>
 
-	
+	<!-- masonry를 이용한 일러스트 보드 출력 -->
 	<div class="grid">
 		<div class="grid-sizer"></div>
 		
-		{% for illust in illust_post %}
-			<div class="grid-item">
-	
-				<a href="#">
-					<img src="{{ illust.illust_url }}" />
-	
-				</a>
-			</div>  
+			{% for illust in illust_objects %}
+				<div class="grid-item">
+				
+					<a href="{% url 'IllustNet:illust_view' illust.id %}">
+						<img src="/media/{{ illust.illust_url }}" />
+					</a>
+					
+				</div>  
+			{% endfor %}
 		
-		{% endfor %}
-		
-		<div class="grid-item">
-
-			<a href="#">
-				<img src="https://i.postimg.cc/gkQkrcf3/4.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/zvyyDzqP/5.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/BZz3Jy9S/custom1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/XYTgXByp/calendar1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/T1jKdLr8/design2.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/Hs2pxzXv/button1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/xTwC6ChB/part2.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/9Qc7S16s/canvas1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/ncT3N5BM/extapp1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/D0XZbr4D/scrolllock1.jpg" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/NFdy16gk/smsbackup3.jpg" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/vHc0VhBL/cisco3.jpg" />
-
-			</a>
-		</div>
-		<div class="grid-item">
-
-			<a href="#">
-				<img src="https://i.postimg.cc/gkQkrcf3/4.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/zvyyDzqP/5.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/BZz3Jy9S/custom1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/XYTgXByp/calendar1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/T1jKdLr8/design2.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/Hs2pxzXv/button1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/xTwC6ChB/part2.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/9Qc7S16s/canvas1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/ncT3N5BM/extapp1.png" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/D0XZbr4D/scrolllock1.jpg" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/NFdy16gk/smsbackup3.jpg" />
-
-			</a>
-		</div>  
-		
-		<div class="grid-item">
-			<a href="#">
-				<img src="https://i.postimg.cc/vHc0VhBL/cisco3.jpg" />
-
-			</a>
-		</div>
-
-
+	{% if page_obj.has_next %}
+		<p class="pagination">
+			<a class="next-page" href="?page={{ page_obj.next_page_number }}">More...</a>
+		</p>
+	{% endif %}	
 	</div>
-*	 
+
+	<div style="height:500px">
+	</div>
+
 	<script>
 		var msnry = new Masonry( '.grid',
 		{ 
@@ -243,7 +80,55 @@
 			percentPosition: true
 		});
 		
-		imagesLoaded( '.grid' ).on( 'progress', function() {  msnry.layout();});
+		imagesLoaded( '.grid' ).on( 'progress', function() {  msnry.layout();
+		});
+		
+		//var page = 0;
 	
+		jQuery(function ($) {
+			var $list = $('.grid');
+			$list.jscroll({
+				padding: 100,
+				pagingSelector: '.pagination',
+				nextSelector: 'a.next-page:last',
+				contentSelector: '.grid-item,.pagination',
+				callback: addImgtoMasonry				// 아이템 추가를 마친 후 콜백되는 메서드
+				//loadingFunction:function(){
+				//
+				//}
+
+			});
+			
+			function addImgtoMasonry(){
+			
+				//alert(page++);			// 아이템이 몇번 실행되는지 확인
+			
+				$('.pagination').remove()
+				$('.jscroll-loading').remove();
+				
+				var added = $(".jscroll-added").contents();
+				$(".jscroll-added").replaceWith(added);
+				// 스크롤이 밑바닥에 닿아 item이 추가될 때 jScroll은 추가된 아이템을 jscroll-added div 클래스에 감싸 추가한다.
+				// 이는 masonry으로 리스트를 생성할 때 방해 요소가 되므로 감싸고 있는 div를 제거하고 masonry를 적용한다.
+				
+				// 단 이 방법을 적용하면 jscroll으로 페이지를 2번 요청하게 되므로
+				// 한 페이지의 지정된 아이템 개수의 2배가 로딩되는 버그가 발생한다.
+				// 따라서 페이지 당 보여질 아이템 개수를 정할 때 이를 고려해야 한다.
+				
+				var msnry = new Masonry( '.jscroll-inner',
+				{ 
+					columnWidth: '.grid-sizer',
+					percentPosition: true
+				});
+		
+				imagesLoaded( '.jscroll-inner' ).on( 'progress', function() {  msnry.layout();
+				});
+
+			}
+			
+		});
+		
+
+
 	</script>
 {% endblock %}

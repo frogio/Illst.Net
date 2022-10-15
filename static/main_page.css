@@ -19,3 +19,6 @@
   right: 12px;
   margin: 0;
 }
+.rounded-circle {
+    border-radius: 50%;
+}

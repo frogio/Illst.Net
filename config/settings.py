@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 	"IllustNet",
 	"common",
 	"bootstrap4",
+	"hitcount",
 ]
 
 MIDDLEWARE = [

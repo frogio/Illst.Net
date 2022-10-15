@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from IllustNet.views import main_views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
-	path("", main_views.index, name="index"),
+	path('', main_views.IllustListView.as_view(), name='index'),
 	path("IllustNet/", include('IllustNet.urls')),
 	path("common/", include('common.urls')),
-]
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
