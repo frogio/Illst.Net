@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import main_views
-from .views import comment_views
+from .views import main_views,  comment_views, user_views
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -13,14 +12,16 @@ urlpatterns = [
 	path('illust/delete/<int:pk>',main_views.IllustDeleteView.as_view(), name="illust_delete"),
 	path('illust/update/<int:pk>',main_views.IllustUpdateView.as_view(), name="illust_update"),
 	
-	
 	path('illust/like/<int:illust_id>', main_views.illust_like ,name='illust_like'),
 
-	path('illust/comment/<int:illust_id>/', comment_views.comment_create_illust, name='comment_create_illust'),
-	#path('comment/modify/question/<int:comment_id>/', comment_views.comment_modify_question, name='comment_modify_question'),
-	#path('comment/delete/question/<int:comment_id>/', comment_views.comment_delete_question, name='comment_delete_question'),
-
-
+	path('illust/comment/create/<int:illust_id>/', comment_views.comment_create_illust, name='comment_create_illust'),
+	path('illust/comment/modify/<int:comment_id>/', comment_views.comment_modify_illust, name='comment_modify_illust'),
+	path('illust/comment/delete/<int:comment_id>/', comment_views.comment_delete_illust, name='comment_delete_illust'),
+	
+	path('user_page/<int:pk>/', user_views.IllustNetUserView.as_view(), name='show_user_page'),
+	path('user_page/follow/<int:user_id>', user_views.follow , name='follow_user'),
+	path('user_page/modify', user_views.modify_user_page , name='modify_user_page'),
+	
 
 	#path('illust/<int:pk>/', main_views.QuestionDetailView.as_view(), name='detail'),
 	

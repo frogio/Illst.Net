@@ -16,6 +16,6 @@ class RegisterView(generic.CreateView):
 	
 	def form_valid(self, form):
 		if(IllustNetUser.objects.filter(nickname=form.instance.nickname).exists()):
-				return HttpResponse("<script>alert(\"닉네임이 중복되었습니다.\");history.back();</script>");	# 올리기 요청
+				return HttpResponse("<script>alert(\"닉네임이 중복되었습니다.\");history.back();</script>");	# 올리기 요청시 중복 요청을 확인한다.
 		
 		return super().form_valid(form)

@@ -22,8 +22,8 @@
 	</div>
 
 	<form method="post" class="post-form my-3" enctype="multipart/form-data">
-
-		{% csrf_token %}	
+	
+		{% csrf_token %}
 		{% bootstrap_form form %}
 		
 		<button type="submit" class="btn btn-primary">업로드</button>
@@ -60,7 +60,7 @@
 	
 	
 		$(document).ready(function(){	
-			const inputImage = document.getElementById("id_illust_url");
+			const inputImage = document.getElementById("id_illust_url");			// id_illust_url은 자동으로 생성된 input 태그의 id임
 			
 			if(inputImage != null){
 				inputImage.addEventListener("change", e =>{ 

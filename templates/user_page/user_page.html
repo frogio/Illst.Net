@@ -1,0 +1,294 @@
+{% extends 'main_page.html' %}
+
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+	@media(max-width:500px){
+		html{
+			font-size:10px;
+		}
+	}
+	
+
+	.banner-img-container{
+		width:100%;
+		max-height:20rem;
+		overflow: hidden;
+	
+	}
+
+	#banner_img{
+		width:100%
+	}
+	
+	p.profile{
+		display:flex;
+		width:100%;
+		justify-content:center;
+		font-size:3rem
+	}
+	
+	
+	.profile{
+		display:flex;
+		width:100%;
+		justify-content:center;
+	}
+	
+	.profile-introduce{
+		width:100%;
+		height:10rem;
+		justify-content:center;
+		font-size:1.2rem
+	}
+	
+	.profile-img{
+		width:10rem;
+		height:10rem;
+	}
+	
+	#nickname{
+		font-weight:bold;
+		font-size : 3rem;
+		
+	}
+	
+	.followers{
+		font-size : 2rem;
+		color : black;
+	
+	}
+
+	.profile-border{
+	
+		border-width: 0px 0px 1px 0px;
+		border-style: solid;
+		padding-top:1rem;
+		padding-bottom:1rem;
+		/*text-align:left;*/
+		
+	}
+	
+	.blank{
+		margin-bottom:10rem;
+	
+	}
+	
+	
+	/*----------------------- illust_board 영역 -----------------------*/
+	
+	
+	.grid-item img {display: block; 
+					min-width:100%; 
+					max-width: 100%;
+					padding:5px;
+					border-radius: 20px;
+					overflow:hidden;
+					}
+					
+	.grid-item:hover{
+		opacity:0.3;
+	}				
+	
+	@media(min-width:900px){
+		.grid-sizer, .grid-item { width: 25%; }
+	}
+	
+	@media(max-width:500px){
+		.grid-sizer, .grid-item { width: 50%; }
+	}
+	
+	@media (min-width:501px) and (max-width:920px){
+		.grid-sizer, .grid-item { width: 33%; }
+	}
+	
+	
+	.title{
+		text-align:center;	
+		margin-bottom:5px;
+		font-size:15px;
+		font-weight:bold;
+	}
+	
+	.artist{
+		text-align:center;
+		margin-bottom:5px;
+		font-size:12px;
+	}
+	
+	a{
+		color:black;
+	}
+	
+	
+
+
+</style>
+
+
+
+	<div class="banner-img-container">
+		<img src = "/media/{{ user.banner_img_url }}" onerror="this.src='{% static 'default_banner_img2.jpg' %}'" id = "banner_img">
+	</div>
+<!-- default_banner_img2.jpg -->
+	<div class = "container mt-5">
+	
+		<div class="profile">
+		
+			<div class="img-wrapper">
+		
+				<img src="/media/{{ user.profile_img_url }}" onerror="this.src='{% static 'icon/annonymous_user.png' %}'">
+	
+			</div>
+	
+			<div class="my-4 mx-3">	
+				<p id = "nickname" >{{ user.nickname }}</p>
+				
+				<div style="display:flex;">
+					{% if request.user.is_authenticated and user.id != request.user.id  %}					<!-- 로그인 되어 있고 타 유저 페이지일 경우 -->
+						<a href="{% url 'IllustNet:follow_user' user.id %}">	<!-- 나의 id값이 아니라 타 유저의 id값을 리턴한다. -->
+							{% if followed == True %}
+							
+								<i class="fas fa-heart followers mt-2"></i>
+								
+							{% else %}
+							
+								<i class="far fa-heart followers mt-2"></i>
+								
+							{% endif %}
+
+						</a>
+						<p class = "followers mx-2">{{ user.follower.count }}</p>
+
+						{% else %}																				<!-- 로그인이 안되어 있거나 자신의 페이지일 경우 -->
+						
+							<i class="fas fa-heart followers mt-2"></i>
+							<p class = "followers mx-2">{{ user.follower.count }}</p>
+						
+						{% if user.id == request.user.id %}													<!-- 나의 페이지일 경우 -->
+						
+							<a href="{% url 'IllustNet:modify_user_page'%}" class ="my-3" style="font-size:1rem">프로필 수정</a>
+							
+						{% endif %}
+						
+					{% endif %}
+
+					
+				</div>
+				<!--<a href="#" class="btn btn-outline-dark">>-->
+				
+			</div>
+			
+		</div>
+		<p class="profile">작가 소개</p>
+		<div class="profile-border my-1"></div>
+		
+		{%if user.introduce%}
+		
+			{{user.introduce}}
+			
+		{% else %}
+			<div class="profile-introduce">
+				<p>입력된 자기소개가 없습니다.</p>
+			</div>
+		{% endif %}
+		
+		<div class="profile-border my-4"></div>
+		<div class="blank"></div>
+
+		<p class="profile">작품 목록</p>
+		<div class="profile-border my-1"></div>
+	
+				<!-- masonry를 이용한 일러스트 보드 출력 -->
+		<div class="grid">
+			<div class="grid-sizer"></div>
+			
+				{% for illust in object_list %}
+					<div class="grid-item">
+					
+						<a href="{% url 'IllustNet:illust_view' illust.id %}">
+							<img src="/media/{{ illust.illust_url }}" />
+						</a>
+						
+					</div>  
+				{% endfor %}
+			
+		{% if page_obj.has_next %}
+			<p class="pagination">
+				<a class="next-page" href="?page={{ page_obj.next_page_number }}&kw={{kw}}">More...</a>
+			</p>
+		{% endif %}	
+		</div>
+	
+		<div style="height:500px">
+		</div>
+
+		
+	</div>	
+	
+
+	<script>
+	$( document ).ready(function() {
+		var msnry = new Masonry( '.grid',
+		{ 
+			columnWidth: '.grid-sizer',
+			percentPosition: true
+		});
+		
+		imagesLoaded( '.grid' ).on( 'progress', function() {  msnry.layout();
+		});
+		
+		//var page = 0;
+	
+		jQuery(function ($) {
+			var $list = $('.grid');
+			$list.jscroll({
+				padding: 100,
+				pagingSelector: '.pagination',
+				nextSelector: 'a.next-page:last',
+				contentSelector: '.grid-item,.pagination',
+				callback: addImgtoMasonry				// 아이템 추가를 마친 후 콜백되는 메서드
+				//loadingFunction:function(){
+				//
+				//}
+
+			});
+	});
+			
+			function addImgtoMasonry(){
+			
+				//alert(page++);			// 아이템이 몇번 실행되는지 확인
+			
+				$('.pagination').remove()
+				$('.jscroll-loading').remove();
+				
+				var added = $(".jscroll-added").contents();
+				$(".jscroll-added").replaceWith(added);
+				// 스크롤이 밑바닥에 닿아 item이 추가될 때 jScroll은 추가된 아이템을 jscroll-added div 클래스에 감싸 추가한다.
+				// 이는 masonry으로 리스트를 생성할 때 방해 요소가 되므로 감싸고 있는 div를 제거하고 masonry를 적용한다.
+				
+				// 단 이 방법을 적용하면 jscroll으로 페이지를 2번 요청하게 되므로
+				// 한 페이지의 지정된 아이템 개수의 2배가 로딩되는 버그가 발생한다.
+				// 따라서 페이지 당 보여질 아이템 개수를 정할 때 이를 고려해야 한다.
+				
+				var msnry = new Masonry( '.jscroll-inner',
+				{ 
+					columnWidth: '.grid-sizer',
+					percentPosition: true
+				});
+		
+				imagesLoaded( '.jscroll-inner' ).on( 'progress', function() {  msnry.layout();
+				});
+
+			}
+			
+		});
+	</script>
+
+
+
+{% endblock %}

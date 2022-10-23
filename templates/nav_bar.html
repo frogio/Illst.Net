@@ -39,22 +39,22 @@
 				
 				{% if request.user.is_authenticated %}				
 				
-					<a class="nav-link" href="#">	 <!-- mypage 이동 앵커 -->
+					<a class="nav-link" href="{% url 'IllustNet:show_user_page' request.user.id%}">	 <!-- mypage 이동 앵커 -->
 							
 						<div style="display:flex">		<!-- flex css 속성은 가로로 엘리먼트를 배치하게 함 -->
 	
 							<li class="nav-item mx-2">
-							
-							<img src="{{ request.user.profile_img_url }}" 
-									onerror="this.src='{% static 'icon/annonymous_user.png' %}'" class="rounded-circle" width="30" height="30">
-							
+							<div class="nav-profile-img">
+								<img src="/media/{{ request.user.profile_img_url }}" 
+									onerror="this.src='{% static 'icon/annonymous_user.png' %}'">
+							</div>
 							</li>
 							
 							<li class="nav-item ">
-								{% if user.is_superuser == 1 %}
+								{% if request.user.is_superuser == 1 %}
 										관리자 계정
 								{% else %}
-										{{ user.nickname }}
+										{{ request.user.nickname }}
 								{% endif %}
 							</li>
 						</div>

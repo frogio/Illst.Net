@@ -7,8 +7,8 @@ from hitcount.models import HitCountMixin
 class IllustNetUser(AbstractUser):
 	nickname = models.CharField(max_length=100)
 	introduce = models.TextField()  # 길이 제한이 없는 문자열
-	profile_img_url = models.CharField(max_length=300)
-	banner_img_url = models.CharField(max_length=300)
+	profile_img_url = models.ImageField(upload_to = "profile_img/", null=True, blank=True, verbose_name=(''))
+	banner_img_url = models.ImageField(upload_to = "banner_img/", null=True, blank=True, verbose_name=(''))
 	follower = models.ManyToManyField('self')
 
 class IllustPost(models.Model, HitCountMixin):

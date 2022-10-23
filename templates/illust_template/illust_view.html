@@ -93,7 +93,7 @@
 			{% endif %}
 			
 			<div class="text-border my-2">
-				<h5><a href="#">{{ illust.illustrator.username }}</a> 작가의 코멘트</h5>					<!-- 일러스트 게시자 프로필 접근 -->
+				<h5><a href="{% url 'IllustNet:show_user_page' illust.illustrator.id%}">{{ illust.illustrator.nickname }}</a> 작가의 코멘트</h5>					<!-- 일러스트 게시자 프로필 접근 -->
 			</div>
 		
 			{{ illust.brief_comment }}
@@ -108,12 +108,17 @@
 			<div class="comment-border">
 			
 				<div class = "mx-3" style="display:flex;">				<!-- 댓글 작성자 -->
-					<a href="#">										<!-- 댓글 작성자 프로필 접근 -->
-						<img src="{{comment.comment_writer.profile_img_url}}"  
-							onerror="this.src='{% static 'icon/annonymous_user.png' %}'" class="rounded-circle" width="30" height="30">
+					<a href="{% url 'IllustNet:show_user_page' comment.comment_writer.id%}">						<!-- 댓글 작성자 프로필 접근 -->
+						
+					<div style="display:flex">
+						<div class="nav-profile-img mx-2">
+							<img src="/media/{{comment.comment_writer.profile_img_url}}"  
+								onerror="this.src='{% static 'icon/annonymous_user.png' %}'">
+						</div>
 						{{comment.comment_writer.nickname}}
-					</a>
+					</div>
 					
+					</a>
 						<!-- 댓글 작성자 -->
 						<p class="my-2 mx-2" style="font-size:10px;">
 							{{comment.upload_time}}
@@ -121,26 +126,50 @@
 
 				</div>
 				
-				<div class="mx-3 my-2" style="display:flex;">									<!-- 댓글 내용 -->
+				<div class="mx-3 my-2 registered_comment" style="display:flex;">									<!-- 댓글 내용 -->
 					{{ comment.comment }}
 					
 					{% if request.user.is_authenticated and illust.illustrator.id == request.user.id  %}
 					
-						<a class="mx-2 my-2"href="#" style="font-size:10px">					<!-- 댓글 수정 / 삭제 -->
+						<a class="mx-2 my-2 comment_modify_btn" href="#" style="font-size:10px">					<!-- 댓글 수정 / 삭제 -->
 							수정
 						</a>
 						
-						<a class="my-2" href="#" style="font-size:10px">
+						<a class="my-2" href="{% url 'IllustNet:comment_delete_illust' comment.id %}" style="font-size:10px">
 							삭제
-						</a>
+						</a>	
 						
 					{% endif %}
+						
 				</div>
+				
+				<div class="my-3 comment_modify" style="display:none">													<!-- 댓글 수정 창 -->
+																														<!-- 처음엔 가려져있지만 수정 버튼을 누르면
+																														jQuery로 인해 보이게 됨-->
+			
+					<form action = "{% url 'IllustNet:comment_modify_illust' comment.id %}" method="post">
+					
+					{% csrf_token %}
+					
+					<textarea class= "form-control" name="comment" rows="3" style="width:100%">{{comment.comment}}</textarea>
+					
+						<div style="display:flex; width:100%;justify-content:right;">
+								
+							<button type="submit" class="btn btn-primary my-3 mx-1">댓글 수정</button>
+							<a class="btn btn-primary my-3 cancel_modify_comment">취소</a>					
+							
+						</div>
+					
+					</form>
+				
+				</div>
+				
+				
 			</div>
 			
 			{% endfor %}
 			
-			<div class="my-3">																	<!-- 댓글 등록 부분 -->
+			<div class="my-3" id="comment_register">																	<!-- 댓글 등록 부분 -->
 			
 					<form action="{% url 'IllustNet:comment_create_illust' illust.id %}" method="post">
 						
@@ -178,14 +207,31 @@
 	}
 
 	$(document).ready(function(){
-	
-	
-		$(".recommend").on('click', function(){
-			location.href = $(this).data('uri');						// 그렇지 않을경우 추천
-		});
-		
 
+		$(".recommend").on('click', function(){
+			location.href = $(this).data('uri');						// 그렇지 않을 경우 추천
+		});
+
+
+		$('.comment_modify_btn').on('click',function(){					// 수정 버튼을 누르면
+			$('#comment_register').hide();								// 댓글 등록창을 가리고
+			
+			$('.comment_modify').hide();								// 열려있는 모든 댓글 수정창을 가린다음					
+			$(this).parent().next().css({"display":"block"});			// 선택한 댓글의 수정창을 띄운다.	(댓글 수정창을 선택한것만 띄우게 하기 위해)
+			
+			$('.registered_comment').css({"display":"block"});			// 그 다음 모든 댓글의 내용을 보이게 한 다음
+			$(this).parent().hide();									// 선택된 댓글의 내용만을 가린다. 	(선택한 등록된 댓글만 가리게 하기 위해)
+		});
+
+	
+		$('.cancel_modify_comment').on('click', function(){				// 댓글 수정을 취소할 경우
+			$('.comment_modify').hide();								// 모든 댓글 수정창을 가리고
+			$('.registered_comment').css({"display":"block"});			// 등록된 모든 댓글을 보여준다
+			$('#comment_register').css({"display":"block"});			// 그 후 댓글 등록창을 보여준다
+		});
+	
 	});
+
 
 </script>
 

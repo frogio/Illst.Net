@@ -19,6 +19,41 @@
   right: 12px;
   margin: 0;
 }
-.rounded-circle {
+
+.img-wrapper {
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+}
+
+.img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50, 50);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: auto;
     border-radius: 50%;
+	backface-visibility: hidden;
+}
+
+.nav-profile-img {
+    position: relative;
+    width: 1.7rem;
+    height: 1.7rem;
+}
+
+.nav-profile-img img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50, 50);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: auto;
+    border-radius: 50%;
+	backface-visibility: hidden;
 }

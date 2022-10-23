@@ -14,9 +14,18 @@
 	.grid-item:hover{
 		opacity:0.3;
 	}				
+	@media(min-width:900px){
+		.grid-sizer, .grid-item { width: 25%; }
+	}
 	
-	.grid-sizer, .grid-item { width: 25%; }
+	@media(max-width:500px){
+		.grid-sizer, .grid-item { width: 50%; }
+	}
 	
+	@media (min-width:501px) and (max-width:920px){
+		.grid-sizer, .grid-item { width: 33%; }
+	}
+
 	
 	.title{
 		text-align:center;	
@@ -34,6 +43,10 @@
 	a{
 		color:black;
 	}
+	
+	#btn_search{
+		cursor:pointer
+	}
 
 
 </style>
@@ -43,9 +56,9 @@
 	<div class="my-3" style="width:100%; padding:30px"/>
 		<div class="search">
 			<input class="search_bar" type="text" placeholder="검색어 입력">
-			<a href="#">
-				<img class="magnify_icon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-			</a>
+			
+			<img class="magnify_icon" id = "btn_search" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			
 		</div>
 	</div>
 
@@ -65,7 +78,7 @@
 		
 	{% if page_obj.has_next %}
 		<p class="pagination">
-			<a class="next-page" href="?page={{ page_obj.next_page_number }}">More...</a>
+			<a class="next-page" href="?page={{ page_obj.next_page_number }}&kw={{kw}}">More...</a>
 		</p>
 	{% endif %}	
 	</div>
@@ -74,6 +87,8 @@
 	</div>
 
 	<script>
+	
+	$( document ).ready(function() {
 		var msnry = new Masonry( '.grid',
 		{ 
 			columnWidth: '.grid-sizer',
@@ -82,6 +97,7 @@
 		
 		imagesLoaded( '.grid' ).on( 'progress', function() {  msnry.layout();
 		});
+
 		
 		//var page = 0;
 	
@@ -98,6 +114,7 @@
 				//}
 
 			});
+	});
 			
 			function addImgtoMasonry(){
 			
@@ -128,7 +145,19 @@
 			
 		});
 		
+		$(".search_bar").keyup(
+		
+			function(e){
+				if(e.keyCode == 13)  
+					location.href = "?kw=" + $(".search_bar").val() + "&page=1";
+					
+		});
+		
+		$("#btn_search").on('click',function(){							// 검색 키를 눌렀을 경우
+			
+			location.href = "?kw=" + $(".search_bar").val() + "&page=1";
+		});
 
-
+		
 	</script>
 {% endblock %}

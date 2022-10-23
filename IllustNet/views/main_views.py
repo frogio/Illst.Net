@@ -5,8 +5,9 @@ from django.views import generic
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse
 from hitcount.views import HitCountDetailView
+from django.db.models import Q
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
 
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -19,24 +20,30 @@ class IllustListView(generic.ListView):
 	context_object_name = 'illust_objects'
 	paginate_by = 10
 	template_name = "illust_board.html"
-	ordering = ['-upload_time']
-#def index(request):
-#	illust_post = IllustPost.objects.all()
-#	page = request.GET.get('page', '1')
-#	paginator = Paginator(illust_post, 20)
-#	
-#	try:
-#		a_page = paginator.page(page)
-#	except PageNotAnInteger:
-#		a_page = paginator.page(1)
-#	except EmptyPage:
-#		a_page = paginator.page(paginator.num_pages)
-#		
-#	print(a_page)
-#		
-#	return render(request, 'illust_board.html', {'a_page': a_page})
+	#ordering = ['-upload_time']
 	
-	
+	def get_context_data(self, *args, **kwargs):
+		# 템플릿에 넘길 context 데이터를 만들어낸다.
+		context = super().get_context_data(*args, **kwargs)
+		kw = self.request.GET.get('kw', '')		# 검색어
+		
+		context['kw'] = kw
+		context['extra'] = 'kw=' + kw
+		
+		return context
+		
+	def get_queryset(self):
+		kw = self.request.GET.get('kw', '')
+		illust_list = IllustPost.objects.all().order_by('-upload_time')
+
+		# 검색 키워드값에 값이 존재할 경우, 필터를 통해 조건에 맞는 내용을 가져온다.
+		if(kw):
+			illust_list = illust_list.filter(
+			Q(title__icontains=kw) |
+			Q(illustrator__nickname__icontains=kw)).distinct()
+
+		return illust_list
+
 	
 class IllustUploadView(LoginRequiredMixin, generic.CreateView):
 	model = IllustPost
@@ -47,7 +54,7 @@ class IllustUploadView(LoginRequiredMixin, generic.CreateView):
 	def form_valid(self, form):
 	
 		if(self.request.FILES.get('illust_url') == None):												# 일러스트 파일이 올려져 있지 않을 경우
-			return HttpResponse("<script>alert(\"일러스트 파일을 올려주세요\");history.back();</script>");	# 올리기 요청
+			return HttpResponse("<script>alert(\"일러스트 파일을 올려주세요\");history.back();</script>")		# 올리기 요청
 	
 		form.instance.upload_time = timezone.now()
 		form.instance.views = 0
