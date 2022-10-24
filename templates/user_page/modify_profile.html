@@ -91,7 +91,6 @@
 	
 	<div class="banner-img-container">
 		<img src = "/media/{{ request.user.banner_img_url }}" onerror="this.src='{% static 'default_banner_img2.jpg' %}'" id = "banner-img">
-
 	</div>
 <!-- default_banner_img2.jpg -->
 	<div class = "container mt-5">
@@ -160,10 +159,13 @@
 			reader.onload = e => {
 				const previewImage = document.getElementById("profile-img");
 				previewImage.src = e.target.result;
+			
+			
 			}
 			// reader가 이미지 읽도록 하기
 				reader.readAsDataURL(input.files[0]);
 		}
+		
 	}
 	function readBannerImage(input) {
 		// 인풋 태그에 파일이 있는 경우
