@@ -25,3 +25,5 @@ Windows 10, Django 4.1.1, SQLite3 기반으로 작성됨
 
 
 ![image](https://user-images.githubusercontent.com/12217092/215035641-6b924214-80c5-4e41-9fb8-bbd17f2bec80.png)
+
+시연 링크 : https://youtu.be/rAMeTIBxKeI
