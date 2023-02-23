@@ -3,24 +3,24 @@
 
 Windows 10, Django 4.1.1, SQLite3 기반으로 작성됨
 
-창작 이미지 소셜 네트워크 서비스인 pinterest를 모방하여 만든 프로젝트입니다.
+이미지 스크랩 소셜 네트워크 서비스인 pinterest를 모방하여 만든 일러스트 공유 사이트 입니다.
 
 
-#핀터레스트 형식의 게시글을 나열함.
+### Masonry 형식으로 일러스트 게시글을 구성
 
 
 
 ![image](https://user-images.githubusercontent.com/12217092/215035437-ba2bec8a-be94-46ec-b547-9ba3a2501792.png)
 
 
-#업로드된 창작품 열람
+### 업로드된 창작품 열람
 
 
 
 ![image](https://user-images.githubusercontent.com/12217092/215035505-23b8f1b0-b906-4972-92f5-8be547753638.png)
 
 
-#마이 페이지
+### 마이 페이지
 
 
 
